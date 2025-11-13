@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Portfolio Desktop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Consolas:wght@400;700&family=Segoe+UI:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" data-window="file-explorer" data-title="File Explorer">
+              <img src="assets/icons/file-explorer.svg" class="custom-icon" alt="File Explorer">
+            <span>File Explorer</span>
+        </div>
+        
+        <div class="desktop-icon" data-window="skills" data-title="Tech Skills">
+              <img src="assets/icons/skills.svg" class="custom-icon" alt="Tech Skills">
+            <span>Tech Skills</span>
+        </div>
+        
+        <div class="desktop-icon" data-window="projects" data-title="Projects">
+              <img src="assets/icons/project.svg" class="custom-icon" alt="Projects">
+            <span>Projects</span>
+        </div>
+
+        <!-- Music desktop icon removed: now using system-tray Spotify control -->
+        
+        <div class="desktop-icon" data-window="resume" data-title="Resume">
+            <img src="assets/icons/resume.svg" class="custom-icon" alt="Resume">
+            <span>Resume</span>
+        </div>
+        
+        <div class="desktop-icon" data-window="contact" data-title="Contact">
+            <img src="assets/icons/contact.svg" class="custom-icon" alt="Contact">
+            <span>Contact</span>
+        </div>
+        
+        <div class="desktop-icon" data-window="about" data-title="About Me">
+            <img src="assets/icons/about.svg" class="custom-icon" alt="About Me">
+            <span>About Me</span>
+        </div>
+        
+        <!-- Windows will be dynamically added here -->
+    </div>
+    
+    <!-- Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">
+            <div class="avatar-placeholder"></div>
+            <div>
+                <div>Adithyan B</div>
+                <div style="font-size: 0.8rem; font-weight: normal;">AI/ML & Full-Stack Developer</div>
+            </div>
+        </div>
+        <div class="start-menu-content">
+            <div class="start-menu-left">
+                <div class="start-menu-item" data-window="file-explorer" data-title="File Explorer">
+                    <img src="assets/icons/file-explorer.svg" class="custom-icon" alt="File Explorer">
+                    <span>File Explorer</span>
+                </div>
+                <div class="start-menu-item" data-window="skills" data-title="Tech Skills">
+                    <img src="assets/icons/skills.svg" class="custom-icon" alt="Tech Skills">
+                    <span>Tech Skills</span>
+                </div>
+                <div class="start-menu-item" data-window="projects" data-title="Projects">
+                    <img src="assets/icons/project.svg" class="custom-icon" alt="Projects">
+                    <span>Projects</span>
+                </div>
+                <!-- Music start-menu item removed; Spotify control moved to system tray -->
+                <div class="start-menu-item" data-window="resume" data-title="Resume">
+                    <img src="assets/icons/resume.svg" class="custom-icon" alt="Resume">
+                    <span>Resume</span>
+                </div>
+                <div class="start-menu-item" data-window="contact" data-title="Contact">
+                    <img src="assets/icons/contact.svg" class="custom-icon" alt="Contact">
+                    <span>Contact</span>
+                </div>
+                <div class="start-menu-item" data-window="about" data-title="About Me">
+                    <img src="assets/icons/about.svg" class="custom-icon" alt="About Me">
+                    <span>About Me</span>
+                </div>
+            </div>
+            <div class="start-menu-right">
+                <div class="skills-section">
+                    <h3>Quick Access</h3>
+                    <div class="start-menu-item" data-window="skills" data-title="Tech Skills">
+                        <img src="assets/icons/skills.svg" class="custom-icon" alt="Skills">
+                        <span>View All Skills</span>
+                    </div>
+                    <div class="start-menu-item" data-window="projects" data-title="Projects">
+                        <img src="assets/icons/project.svg" class="custom-icon" alt="Projects">
+                        <span>Latest Projects</span>
+                    </div>
+                    <div class="start-menu-item" data-window="contact" data-title="Contact">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Get In Touch</span>
+                    </div>
+                </div>
+                
+                <div class="skills-section">
+                    <h3>System</h3>
+                    <div class="start-menu-item" id="startInfoItem">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Portfolio Info</span>
+                    </div>
+                    <div class="start-menu-item" id="startCalendarItem">
+                        <i class="fas fa-calendar"></i>
+                        <span>Calendar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calendar Popup -->
+    <div class="calendar-popup" id="calendarPopup">
+        <div class="calendar-header">
+            <button class="calendar-nav" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+            <div id="currentMonth">October 2023</div>
+            <button class="calendar-nav" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Calendar will be generated dynamically -->
+        </div>
+    </div>
+    
+    <!-- System Info Popup -->
+    <div class="system-info-popup" id="systemInfoPopup">
+        <h3 style="margin-bottom: 15px; color: var(--accent-color);">Portfolio Information</h3>
+        <div class="system-info-item">
+            <div class="system-info-label">Developer:</div>
+            <div class="system-info-value">Adithyan B</div>
+        </div>
+        <div class="system-info-item">
+            <div class="system-info-label">Role:</div>
+            <div class="system-info-value">AI/ML & Full-Stack Developer</div>
+        </div>
+        <div class="system-info-item">
+            <div class="system-info-label">Experience:</div>
+            <div class="system-info-value">B.Tech (Data Science)</div>
+        </div>
+        <div class="system-info-item">
+            <div class="system-info-label">Specialization:</div>
+            <div class="system-info-value">Machine Learning, Automation, Full-Stack</div>
+        </div>
+        <div class="system-info-item">
+            <div class="system-info-label">Status:</div>
+            <div class="system-info-value">Available for Opportunities</div>
+        </div>
+        <div class="system-info-item">
+            <div class="system-info-label">Contact:</div>
+            <div class="system-info-value"><a href="mailto:adithyanb38@gmail.com">adithyanb38@gmail.com</a></div>
+        </div>
+    </div>
+    
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" id="contextOpen">
+            <i class="fas fa-folder-open"></i>
+            <span>Open</span>
+        </div>
+        <div class="context-menu-item">
+            <i class="fas fa-trash"></i>
+            <span>Delete</span>
+        </div>
+        <div class="context-menu-item">
+            <i class="fas fa-edit"></i>
+            <span>Rename</span>
+        </div>
+        <div class="context-menu-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Properties</span>
+        </div>
+    </div>
+    
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" id="startButton">
+            <i class="fab fa-windows"></i>
+            Start
+        </button>
+        <div class="taskbar-items" id="taskbarItems">
+            <!-- Taskbar items will be dynamically added here -->
+        </div>
+        <div class="system-tray">
+            <div class="system-icon" id="wifiIcon" title="Wi-Fi">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <div class="system-icon" id="volumeIcon" title="Volume">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <div class="system-icon" id="systemInfoIcon" title="Portfolio Information">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="clock" id="clock">
+                <!-- Time will be updated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
