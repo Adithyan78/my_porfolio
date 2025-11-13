@@ -366,6 +366,25 @@ body::before {
     font-size: 0.9rem;
 }
 
+/* Fullscreen button in system tray */
+.fullscreen-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.fullscreen-btn .fs-glyph { line-height: 1; }
+.fullscreen-btn:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
+.fullscreen-btn.active { background: var(--accent-color); color: white; border-color: rgba(0,0,0,0.12); }
+
 .system-icon {
     cursor: pointer;
     padding: 5px;

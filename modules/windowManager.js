@@ -370,6 +370,38 @@ export function initWindowManager() {
         if (systemInfoPopup) systemInfoPopup.style.display = 'none';
     });
 
+    // Fullscreen toggle button in system tray
+    const systemTray = document.querySelector('.system-tray');
+    if (systemTray && !document.getElementById('fullscreenBtn')) {
+        const fsBtn = document.createElement('button');
+        fsBtn.id = 'fullscreenBtn';
+        fsBtn.className = 'system-icon fullscreen-btn';
+        fsBtn.type = 'button';
+        fsBtn.title = 'Toggle Fullscreen';
+        fsBtn.setAttribute('aria-label', 'Toggle Fullscreen');
+        // use a simple glyph for fullscreen
+        fsBtn.innerHTML = '<span class="fs-glyph">⤢</span>';
+        systemTray.insertBefore(fsBtn, systemTray.firstChild);
+
+        function updateFsState() {
+            if (document.fullscreenElement) fsBtn.classList.add('active');
+            else fsBtn.classList.remove('active');
+        }
+
+        fsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        });
+
+        document.addEventListener('fullscreenchange', updateFsState);
+        // initialize state
+        updateFsState();
+    }
+
     // System info icon
     const sysIcon = document.getElementById('systemInfoIcon');
     if (sysIcon) sysIcon.addEventListener('click', showSystemInfo);
