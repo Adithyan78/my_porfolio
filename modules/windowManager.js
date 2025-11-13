@@ -384,20 +384,69 @@ export function initWindowManager() {
         systemTray.insertBefore(fsBtn, systemTray.firstChild);
 
         function updateFsState() {
-            if (document.fullscreenElement) fsBtn.classList.add('active');
-            else fsBtn.classList.remove('active');
+            if (document.fullscreenElement) {
+                fsBtn.classList.add('active');
+                // ensure pseudo-fullscreen class is not left behind
+                document.body.classList.remove('pseudo-fullscreen');
+            } else if (document.body.classList.contains('pseudo-fullscreen')) {
+                // pseudo mode is active
+                fsBtn.classList.add('active');
+            } else {
+                fsBtn.classList.remove('active');
+            }
         }
 
-        fsBtn.addEventListener('click', (e) => {
+        function togglePseudoFullscreen(on) {
+            try {
+                if (on) {
+                    document.body.classList.add('pseudo-fullscreen');
+                    // attempt to hide mobile browser chrome by scrolling (works in some browsers)
+                    if (isMobile) setTimeout(() => { try { window.scrollTo(0, 1); } catch (e) {} }, 300);
+                } else {
+                    document.body.classList.remove('pseudo-fullscreen');
+                }
+                updateFsState();
+            } catch (e) { /* ignore */ }
+        }
+
+        fsBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            } else {
-                document.exitFullscreen().catch(() => {});
+            // Try native Fullscreen API first
+            try {
+                if (!document.fullscreenElement) {
+                    if (document.documentElement.requestFullscreen) {
+                        await document.documentElement.requestFullscreen();
+                        // native fullscreen expected; update state in fullscreenchange handler
+                        return;
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        await document.exitFullscreen();
+                        return;
+                    }
+                }
+            } catch (err) {
+                // fall through to pseudo fullscreen
             }
+
+            // If native fullscreen not available or blocked (common on some mobile browsers), use CSS pseudo-fullscreen
+            const isPseudo = document.body.classList.contains('pseudo-fullscreen');
+            togglePseudoFullscreen(!isPseudo);
         });
 
-        document.addEventListener('fullscreenchange', updateFsState);
+        // When native fullscreen toggles, keep state in sync and clear pseudo mode
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                // entered native fullscreen
+                document.body.classList.remove('pseudo-fullscreen');
+            }
+            updateFsState();
+        });
+
+        // handle orientation change / resize: if in pseudo mode, ensure layout fits
+        window.addEventListener('orientationchange', () => { if (document.body.classList.contains('pseudo-fullscreen')) updateFsState(); });
+        window.addEventListener('resize', () => { if (document.body.classList.contains('pseudo-fullscreen')) updateFsState(); });
+
         // initialize state
         updateFsState();
     }

@@ -385,6 +385,26 @@ body::before {
 .fullscreen-btn:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
 .fullscreen-btn.active { background: var(--accent-color); color: white; border-color: rgba(0,0,0,0.12); }
 
+/* Pseudo-fullscreen mode for browsers that block the Fullscreen API (mobile fallback) */
+body.pseudo-fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Ensure desktop uses full viewport height when pseudo-fullscreen is active */
+body.pseudo-fullscreen .desktop {
+    height: calc(100vh - var(--taskbar-height));
+    overflow: auto;
+}
+
+/* Make windows stretch a bit more in pseudo-fullscreen */
+body.pseudo-fullscreen .window.maximized {
+    height: calc(100% - var(--taskbar-height)) !important;
+}
+
 .system-icon {
     cursor: pointer;
     padding: 5px;
