@@ -168,7 +168,69 @@ export function openWindow(type, title) {
         bringToFront(id);
     });
 
-    // If file-explorer, wire folder-item open actions
+    
+
+    // Create taskbar item (taskbar module creates clickable element that dispatches 'taskbar-click')
+    createTaskbarItem(id, title, fileSystem[title] ? fileSystem[title].icon : 'fas fa-file');
+
+    // Inject content — if it's the About window, use typing animation
+    try {
+        const bodyEl = windowElement.querySelector('.window-body .inner-content-placeholder');
+        if (title === 'About Me' && bodyEl) {
+            // If the about text has already been typed in this session, just inject raw HTML
+            const typedFlag = sessionStorage.getItem('about_typed');
+            if (typedFlag === '1') {
+                bodyEl.innerHTML = windowContent;
+            } else {
+                // animate the HTML content into the placeholder and support skipping
+                const controller = animateTyping(bodyEl, windowContent, { charDelay: 18, elementDelay: 120 });
+
+                // create a visible Skip button in the window header so users can stop the typing
+                try {
+                    const headerEl = windowElement.querySelector('.window-header');
+                    if (headerEl) {
+                        const skipBtn = document.createElement('button');
+                        skipBtn.className = 'typing-skip';
+                        skipBtn.type = 'button';
+                        skipBtn.textContent = 'Skip';
+                        // place the skip button inside the window-controls so it appears on the right
+                        const controls = headerEl.querySelector('.window-controls');
+                        if (controls) {
+                            controls.appendChild(skipBtn);
+                        } else {
+                            headerEl.appendChild(skipBtn);
+                        }
+                        skipBtn.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            if (controller && typeof controller.finish === 'function') controller.finish();
+                        });
+
+                        // remove the skip button after typing finishes
+                        controller.done.then(() => {
+                            try { sessionStorage.setItem('about_typed', '1'); } catch (e) { /* ignore */ }
+                            if (skipBtn && skipBtn.parentNode) skipBtn.parentNode.removeChild(skipBtn);
+                        });
+                    } else {
+                        // fallback: still mark session when done
+                        controller.done.then(() => {
+                            try { sessionStorage.setItem('about_typed', '1'); } catch (e) { /* ignore */ }
+                        });
+                    }
+                } catch (e) {
+                    // ensure we still mark session even if skip button handling fails
+                    controller.done.then(() => {
+                        try { sessionStorage.setItem('about_typed', '1'); } catch (e) { /* ignore */ }
+                    });
+                }
+            }
+        } else {
+            // default: inject raw HTML
+            const body = windowElement.querySelector('.window-body');
+            if (body) body.innerHTML = windowContent;
+        }
+    } catch (e) { /* ignore content injection errors */ }
+
+    // If file-explorer, wire folder-item open actions AFTER content is injected
     if (type === 'file-explorer') {
         const attachFolderListeners = () => {
             windowElement.querySelectorAll('.folder-item').forEach(item => {
@@ -186,29 +248,21 @@ export function openWindow(type, title) {
                     }, { once: false });
                 }
             });
+            // sidebar items (e.g., System) — single-click to open
+            windowElement.querySelectorAll('.sidebar-item').forEach(side => {
+                const winType = side.getAttribute('data-window');
+                const title = side.getAttribute('data-title');
+                if (!winType) return;
+                side.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    openWindow(winType, title || winType);
+                }, { once: false });
+            });
         };
-        if (document.readyState === 'loading') {
-            windowElement.addEventListener('DOMContentLoaded', attachFolderListeners);
-        } else {
-            attachFolderListeners();
-        }
+        // attach immediately (content was just injected)
+        try { attachFolderListeners(); } catch (e) { /* ignore */ }
     }
-
-    // Create taskbar item (taskbar module creates clickable element that dispatches 'taskbar-click')
-    createTaskbarItem(id, title, fileSystem[title] ? fileSystem[title].icon : 'fas fa-file');
-
-    // Inject content — if it's the About window, use typing animation
-    try {
-        const bodyEl = windowElement.querySelector('.window-body .inner-content-placeholder');
-        if (title === 'About Me' && bodyEl) {
-            // animate the HTML content into the placeholder
-            animateTyping(bodyEl, windowContent, { charDelay: 18, elementDelay: 120 });
-        } else {
-            // default: inject raw HTML
-            const body = windowElement.querySelector('.window-body');
-            if (body) body.innerHTML = windowContent;
-        }
-    } catch (e) { /* ignore content injection errors */ }
 
     // Initialize app-specific logic (music, calendar, etc.)
     try {

@@ -49,7 +49,7 @@ export const fileSystem = {
                         <i class="fas fa-folder"></i>
                         <span>Documents</span>
                     </div>
-                    <div class="sidebar-item">
+                    <div class="sidebar-item" data-window="System" data-title="System">
                         <i class="fas fa-cog"></i>
                         <span>System</span>
                     </div>
@@ -78,6 +78,28 @@ export const fileSystem = {
                         </div>
                     </div>
                 </div>
+            </div>
+        `
+    }
+    ,
+    "System": {
+        type: "file",
+        icon: "assets/icons/file-explorer.svg",
+        content: `
+            <div class="file-content">
+                <h2>System Information</h2>
+                <p><strong>Created:</strong> 2025-11-13</p>
+                <h3>Tech Stack</h3>
+                <ul>
+                    <li>HTML5 &amp; CSS3 (responsive layout)</li>
+                    <li>Vanilla JavaScript (ES Modules)</li>
+                    <li>Canvas API for animated background</li>
+                    <li>SVG icons and imagery</li>
+                    <li>No bundler — static site served via GitHub Pages</li>
+                    <li>Git for version control; GitHub Pages for hosting</li>
+                </ul>
+                <h3>Notes</h3>
+                <p>This portfolio is a static, module-based site using plain JavaScript and CSS. You can edit the content under <code>modules/</code> to update pages or the displayed tech stack.</p>
             </div>
         `
     }

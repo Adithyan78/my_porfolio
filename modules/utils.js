@@ -36,6 +36,11 @@ export function animateTyping(targetEl, htmlString, opts = {}) {
     const charDelay = typeof opts.charDelay === 'number' ? opts.charDelay : 25;
     const elementDelay = typeof opts.elementDelay === 'number' ? opts.elementDelay : 120;
 
+    let finished = false;
+    let finishRequested = false;
+    let finishResolve;
+    const done = new Promise(res => { finishResolve = res; });
+
     function sleep(ms) {
         return new Promise(res => setTimeout(res, ms));
     }
@@ -43,7 +48,18 @@ export function animateTyping(targetEl, htmlString, opts = {}) {
     async function typeTextNode(text, container) {
         const tn = document.createTextNode('');
         container.appendChild(tn);
+        // ensure caret stays at the end
+        if (caret.parentNode) container.appendChild(caret);
         for (let i = 0; i < text.length; i++) {
+            if (finishRequested) {
+                // immediately finish
+                container.removeChild(tn);
+                const wrapper = document.createElement('span');
+                wrapper.textContent = text;
+                container.appendChild(wrapper);
+                if (caret.parentNode) container.appendChild(caret);
+                return;
+            }
             tn.nodeValue += text[i];
             await sleep(charDelay);
         }
@@ -51,8 +67,8 @@ export function animateTyping(targetEl, htmlString, opts = {}) {
 
     async function typeElement(node, parent) {
         if (node.nodeType === Node.TEXT_NODE) {
-            const txt = node.nodeValue.trim();
-            if (txt.length) await typeTextNode(txt, parent);
+            const txt = node.nodeValue;
+            if (txt && txt.trim().length) await typeTextNode(txt, parent);
             return;
         }
 
@@ -64,23 +80,52 @@ export function animateTyping(targetEl, htmlString, opts = {}) {
                 el.setAttribute(attr.name, attr.value);
             }
             parent.appendChild(el);
+            // ensure caret remains at end
+            if (caret.parentNode) parent.appendChild(caret);
             // small pause before typing children so headings appear then type
             await sleep(elementDelay);
             for (let child of Array.from(node.childNodes)) {
+                if (finishRequested) break;
                 await typeElement(child, el);
             }
         }
     }
 
-    // Kick off typing asynchronously
-    (async () => {
-        // parse html into a fragment
-        const tmp = document.createElement('div');
-        tmp.innerHTML = htmlString;
-        // clear target
-        targetEl.innerHTML = '';
-        for (let child of Array.from(tmp.childNodes)) {
-            await typeElement(child, targetEl);
+    // caret element
+    const caret = document.createElement('span');
+    caret.className = 'typing-caret';
+
+    async function run() {
+        try {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = htmlString;
+            targetEl.innerHTML = '';
+            // attach caret at the end
+            targetEl.appendChild(caret);
+            for (let child of Array.from(tmp.childNodes)) {
+                if (finishRequested) break;
+                await typeElement(child, targetEl);
+            }
+            if (finishRequested) {
+                targetEl.innerHTML = htmlString;
+                targetEl.appendChild(caret);
+            }
+        } catch (e) {
+            // on error, fallback to full render
+            targetEl.innerHTML = htmlString;
+            targetEl.appendChild(caret);
         }
-    })();
+        finished = true;
+        finishResolve();
+    }
+
+    // start
+    run();
+
+    function finish() {
+        if (finished) return;
+        finishRequested = true;
+    }
+
+    return { done, finish, isTyping: () => !finished };
 }

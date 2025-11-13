@@ -53,6 +53,37 @@ body::before {
     100% { background-position: 0% 50%; }
 }
 
+/* Typing caret for animated typing */
+.typing-caret {
+    display: inline-block;
+    width: 2px;
+    background: var(--text-color);
+    margin-left: 6px;
+    vertical-align: middle;
+    height: 1em;
+    animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
+/* Skip button shown during About typing */
+.typing-skip {
+    background: transparent;
+    color: var(--accent-color);
+    border: none;
+    padding: 0 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.95;
+}
+.typing-skip:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
+
 .decor-orbs {
     position: fixed;
     inset: 0;
