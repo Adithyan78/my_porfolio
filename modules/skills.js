@@ -5,7 +5,7 @@ export const skillsContent = `
                         <img src="assets/icons/python.svg" class="skill-icon-img" alt="Python">
                     </div>
                     <div class="skill-name">Python</div>
-                    <div class="skill-level">Advanced</div>
+                    <div class="skill-level">Intermediate</div>
                 </div>
 
                 <div class="skill-app" data-skill="html">
@@ -21,7 +21,7 @@ export const skillsContent = `
                         <img src="assets/icons/css3.svg" class="skill-icon-img" alt="CSS3">
                     </div>
                     <div class="skill-name">CSS3</div>
-                    <div class="skill-level">Expert</div>
+                    <div class="skill-level">Intermediate</div>
                 </div>
 
                 <div class="skill-app" data-skill="react">
@@ -29,7 +29,7 @@ export const skillsContent = `
                         <img src="assets/icons/react.svg" class="skill-icon-img" alt="React">
                     </div>
                     <div class="skill-name">React</div>
-                    <div class="skill-level">Advanced</div>
+                    <div class="skill-level">Intermediate</div>
                 </div>
 
                 <div class="skill-app" data-skill="docker">
@@ -37,7 +37,7 @@ export const skillsContent = `
                         <img src="assets/icons/docker.svg" class="skill-icon-img" alt="Docker">
                     </div>
                     <div class="skill-name">Docker</div>
-                    <div class="skill-level">Intermediate</div>
+                    <div class="skill-level">Beginner</div>
                 </div>
 
                 <div class="skill-app" data-skill="mysql">
@@ -53,7 +53,7 @@ export const skillsContent = `
                         <img src="assets/icons/js.svg" class="skill-icon-img" alt="JavaScript">
                     </div>
                     <div class="skill-name">JavaScript</div>
-                    <div class="skill-level">Advanced</div>
+                    <div class="skill-level">Intermediate</div>
                 </div>
 
                 <div class="skill-app" data-skill="pytorch">
@@ -61,7 +61,7 @@ export const skillsContent = `
                         <img src="assets/icons/pytorch.svg" class="skill-icon-img" alt="PyTorch">
                     </div>
                     <div class="skill-name">PyTorch</div>
-                    <div class="skill-level">Intermediate</div>
+                    <div class="skill-level">Beginner</div>
                 </div>
 
                 <div class="skill-app" data-skill="express">
@@ -69,7 +69,7 @@ export const skillsContent = `
                         <img src="assets/icons/express.svg" class="skill-icon-img" alt="Express">
                     </div>
                     <div class="skill-name">Express</div>
-                    <div class="skill-level">Advanced</div>
+                    <div class="skill-level">Intermediate</div>
                 </div>
             </div>
         `;

@@ -1,7 +1,7 @@
 import { fileSystem } from './fileSystem.js';
 import { initCalendar, updateCalendar } from './calendar.js';
 import { createTaskbarItem, updateTaskbarItem, removeTaskbarItem } from './taskbar.js';
-import { isMobile, updateClock, handleIconClick, showSystemInfo } from './utils.js';
+import { isMobile, updateClock, handleIconClick, showSystemInfo, animateTyping } from './utils.js';
 import { initMusic } from './music.js';
 
 // Full window manager migrated from script.js
@@ -116,7 +116,8 @@ export function openWindow(type, title) {
             </div>
         </div>
         <div class="window-body">
-            ${windowContent}
+            <!-- content will be injected -->
+            <div class="inner-content-placeholder"></div>
         </div>
     `;
 
@@ -195,6 +196,19 @@ export function openWindow(type, title) {
 
     // Create taskbar item (taskbar module creates clickable element that dispatches 'taskbar-click')
     createTaskbarItem(id, title, fileSystem[title] ? fileSystem[title].icon : 'fas fa-file');
+
+    // Inject content — if it's the About window, use typing animation
+    try {
+        const bodyEl = windowElement.querySelector('.window-body .inner-content-placeholder');
+        if (title === 'About Me' && bodyEl) {
+            // animate the HTML content into the placeholder
+            animateTyping(bodyEl, windowContent, { charDelay: 18, elementDelay: 120 });
+        } else {
+            // default: inject raw HTML
+            const body = windowElement.querySelector('.window-body');
+            if (body) body.innerHTML = windowContent;
+        }
+    } catch (e) { /* ignore content injection errors */ }
 
     // Initialize app-specific logic (music, calendar, etc.)
     try {

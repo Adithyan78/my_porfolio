@@ -33,7 +33,7 @@ export const resumeContent = `
                     <ul>
                         <li>Built an end-to-end automated pipeline to scrape, preprocess, and classify internships from Internshala using Playwright.</li>
                         <li>Applied TF-IDF vectorization and Logistic Regression to categorize job titles into 5 computer science domains (Data Science/ML, Cloud, Web, App, Software).</li>
-                        <li>Achieved 9% classification accuracy on test data, ensuring reliable job field predictions for unseen titles.</li>
+                        <li>Achieved 94% classification accuracy on test data, ensuring reliable job field predictions for unseen titles.</li>
                         <li>Designed a modular, scalable architecture integrating data scraping, ML inference, and MongoDB upserts with deduplication handling.</li>
                     </ul>
                 </div>
