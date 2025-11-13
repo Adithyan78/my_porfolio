@@ -13,6 +13,7 @@
     --window-border: #3e3e42;
     --desktop-bg: #0c0c0c;
     --taskbar-bg: #2d2d30;
+    --taskbar-height: 40px; /* default taskbar height */
 }
 
 * {
@@ -86,7 +87,7 @@ body::before {
 }
 
 /* Ensure main content stacks above the decorative background */
-.desktop, .taskbar, .start-menu, .window, .context-menu, .calendar-popup, .system-info-popup {
+.desktop, .start-menu, .window, .context-menu, .calendar-popup, .system-info-popup {
     position: relative; /* keep existing stacking but ensure z-index works */
     z-index: 1;
 }
@@ -111,6 +112,11 @@ body::before {
     gap: 20px;
     overflow: auto;
     position: relative;
+}
+
+/* Make sure desktop content doesn't get hidden under the fixed taskbar */
+.desktop {
+    padding-bottom: calc(var(--taskbar-height) + 20px);
 }
 
 .desktop-icon {
@@ -262,12 +268,16 @@ body::before {
 
 .taskbar {
     background-color: var(--taskbar-bg);
-    height: 40px;
+    height: var(--taskbar-height);
     display: flex;
     align-items: center;
     padding: 0 10px;
     border-top: 1px solid var(--window-border);
-    z-index: 100;
+    position: fixed; /* keep taskbar visible */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001; /* higher than windows/background */
 }
 
 .start-button {
@@ -959,10 +969,13 @@ body::before {
         height: calc(100% - 40px) !important;
     }
     
+    /* increase taskbar height on smaller screens and adjust desktop padding */
+    :root { --taskbar-height: 50px; }
     .taskbar {
-        height: 50px;
+        height: var(--taskbar-height);
         padding: 0 5px;
     }
+    .desktop { padding-bottom: calc(var(--taskbar-height) + 18px); }
     
     .start-button {
         padding: 8px 12px;
