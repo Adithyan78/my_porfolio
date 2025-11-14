@@ -5,11 +5,12 @@ export const resumeContent = `
 
                 <div class="contact-row">
                     <span>Email: <a href="mailto:adithyanb38@gmail.com">adithyanb38@gmail.com</a></span>
-                    <span>LinkedIn: <em>(provide link)</em></span>
-                    <span>GitHub: <em>(provide link)</em></span>
-                    <span>LeetCode: <em>(provide link)</em></span>
+                    <span>LinkedIn: <a href="https://www.linkedin.com/in/adithyan-b----/">LinkedIn</a></span>
+                    <span>GitHub: <a href="https://github.com/Adithyan78">GitHub</a></span>
+                    <span>LeetCode: <a href="https://leetcode.com/u/K3hqnMTeOf/">Leetcode</a></span>
                 </div>
 
+                
                 <h3>Profile Summary</h3>
                 <p>Passionate developer with a strong foundation in Machine Learning, Automation, and Full-Stack Web Development. Skilled in building intelligent, data-driven applications and scalable web systems using modern technologies. Enthusiastic about integrating AI and automation into real-world software to enhance efficiency, usability, and performance.</p>
 
